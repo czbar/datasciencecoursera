@@ -11,15 +11,15 @@
 mergeTrainAndTest <- function()
 {
   # read training and test data
-  train<-read.table("./data/train/X_train.txt")
-  test<-read.table("./data/test/X_test.txt")
+  train<-read.table("./train/X_train.txt")
+  test<-read.table("./test/X_test.txt")
   
   # combine training and test data table
   mx <- rbind(train,test)
   
   # read activity labels
-  trainActivities<-read.table("./data/train/y_train.txt")
-  testActivities<-read.table("./data/test/y_test.txt")
+  trainActivities<-read.table("./train/y_train.txt")
+  testActivities<-read.table("./test/y_test.txt")
   
   # combine activity labels
   # so they match merged training and test data rows
@@ -29,7 +29,7 @@ mergeTrainAndTest <- function()
   myx <- cbind(my,mx)
   
   # read feature names
-  featureNames<-read.table("./data/features.txt")
+  featureNames<-read.table("./features.txt")
   
   # use feature names as column names
   v<-as.vector(featureNames[,2])
@@ -40,7 +40,7 @@ mergeTrainAndTest <- function()
   # read activity names
   # First column contains the activity label and the
   # second the activity name
-  activityLabels<-read.table("./data/activity_labels.txt")
+  activityLabels<-read.table("./activity_labels.txt")
   colnames(activityLabels)<-c("activity", "activity_name")
 
   # select only columns that have "mean" or "std"
@@ -60,15 +60,15 @@ mergeTrainAndTest <- function()
   tidy_data_1<-merge(activityLabels, mean_std,by.x="activity", by.y="activity", all=TRUE)  
 
   # write out the first tidy data set
-  write.table(tidy_data_1, "./data/tidy_data_1.txt", row.names=FALSE)
+  write.table(tidy_data_1, "./tidy_data_1.txt", row.names=FALSE)
   
   # now create the second data set.
   # to do that let's go back to the pre-filtered 
   # data table myx and insert a column with subject id
   
   # read training and test subjects
-  trainSubjects<-read.table("./data/train/subject_train.txt")
-  testSubjects<-read.table("./data/test/subject_test.txt")
+  trainSubjects<-read.table("./train/subject_train.txt")
+  testSubjects<-read.table("./test/subject_test.txt")
   subjects <- rbind(trainSubjects, testSubjects)
 
   v<-colnames(myx)
@@ -83,6 +83,6 @@ mergeTrainAndTest <- function()
   tidy_data_2<-dcast(molten, subject + activity ~ variable, mean)
   
   # write out the second tidy data set
-  write.table(tidy_data_2, "./data/tidy_data_2.txt", row.names=FALSE)
+  write.table(tidy_data_2, "./tidy_data_2.txt", row.names=FALSE)
 }
 
